@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>assets/background.jpg</file>
+        <file>assets/nba_1.jfif</file>
+        <file>assets/nba_1.jpeg</file>
+        <file>assets/nba_2.jfif</file>
+        <file>assets/nba_2.jpeg</file>
+        <file>assets/nba_3.jfif</file>
+        <file>assets/nba_3.jpeg</file>
+        <file>assets/nba_4.jfif</file>
+        <file>assets/nba_4.jpeg</file>
+        <file>assets/nba_5.jfif</file>
+        <file>assets/nba_5.jpeg</file>
+    </qresource>
+</RCC>
