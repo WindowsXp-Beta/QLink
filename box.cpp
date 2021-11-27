@@ -24,7 +24,8 @@ Box::Box(int row, int column, Type type, int content, int border, bool isHint) :
 
 Box::~Box()
 {
-    qDebug() << "delete a box";
+    return ;
+//    qDebug() << "delete a box";
 }
 
 QRectF Box::boundingRect() const

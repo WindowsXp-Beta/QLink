@@ -6,7 +6,6 @@
 #include "player.h"
 #include "link.h"
 #include "box.h"
-#include "qlinktest.h"
 
 class QGraphicsScene;
 class QGraphicsView;

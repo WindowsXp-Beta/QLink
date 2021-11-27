@@ -66,9 +66,15 @@ GameWindow::GameWindow(QWidget *parent) :
     countDownTimer.setInterval(1000);
     connect(&responseTimer, &QTimer::timeout, this, &GameWindow::handleMoveKeyPress);
     connect(&responseTimer, &QTimer::timeout, scene, &QGraphicsScene::advance);
+    hintTimer.setSingleShot(true);
     connect(&hintTimer, &QTimer::timeout, this, &GameWindow::stopHint);
     connect(&propTimer, &QTimer::timeout, this, &GameWindow::generateProp);
     connect(&countDownTimer, &QTimer::timeout, this, &GameWindow::updateRemainingTime);
+
+    //initialize data
+    playerList[0] = nullptr;
+    playerList[1] = nullptr;
+    hintPair = QVector<Box *>(2, nullptr);
 }
 
 void GameWindow::startGame(GameMode mode)
@@ -113,7 +119,7 @@ void GameWindow::loadGame()
     hintPair = QVector<Box *>(2, nullptr);
     if (isHint) {
         line = in.readLine();
-        hintTimeRemaining = line2List[0].toInt();
+        hintTimeRemaining = line.toInt();
     }
     line = in.readLine();
     line2List = line.split(' ');
@@ -155,7 +161,8 @@ void GameWindow::loadGame()
                 border,
                 boxIsHint);
         if (isHint && boxIsHint) {
-            hintPair.append(newBox);
+            int index = hintPair[0] == nullptr ? 0 : 1;
+            hintPair[index] = newBox;
         }
         if (border == 0 || border == 1) playerList[border]->setChosenBox(newBox);
         boxSet.insert(newBox);
@@ -168,6 +175,7 @@ void GameWindow::loadGame()
     ui->player2score->setText("Player2 Score: " + QString::number(playerScore[1]));
 
     if (isHint) hintTimer.start(hintTimeRemaining);
+    qDebug() << hintTimer.interval();
     countDownTimer.start();
     responseTimer.start();
     propTimer.start();
@@ -175,7 +183,16 @@ void GameWindow::loadGame()
 
 GameWindow::~GameWindow()
 {
-    scene->clear();
+    for (auto player: playerList) {
+        if (player != nullptr) {
+            scene->removeItem(player);
+            delete player;
+        }
+    }
+    foreach (auto box, boxSet) {
+        scene->removeItem(box);
+        delete box;
+    }
     delete ui;
 }
 
@@ -185,7 +202,8 @@ void GameWindow::startHint(Box *hintProp)
     assert(boxSet.remove(hintProp));
 
     hintTimer.stop();
-    hintTimer.start();
+    //QTimer::start(int millisecond) will change its interval
+    hintTimer.start(10000);
 
     if (!isHint) {
         bool flag = generateHint();
@@ -218,7 +236,6 @@ bool GameWindow::generateHint(bool mode)
 
 void GameWindow::stopHint()
 {
-    hintTimer.stop();
     isHint = false;
     assert(hintPair[0] != nullptr);
     hintPair[0]->unChooseHint();
@@ -326,12 +343,14 @@ void GameWindow::noSolution()
     hintTimer.stop();
     propTimer.stop();
     responseTimer.stop();
+
     QMessageBox::warning(this, tr("No solutions"), tr("current map doesn't have solutions, will go back to Home"));
     scene->clear();
     boxSet.clear();
     occupySet.clear();
     pressedKeys.clear();
-
+    playerList[0] = nullptr;
+    playerList[1] = nullptr;
 
     emit backToStartWindowSignal();
 }
@@ -344,9 +363,12 @@ void GameWindow::closeGame()
     responseTimer.stop();
 
     scene->clear();
+    boxSet.clear();
     occupySet.clear();
     pressedKeys.clear();
 
+    playerList[0] = nullptr;
+    playerList[1] = nullptr;
 
     QString message = "Player1's score is " + QString::number(playerScore[0]);
     if (mode == Battle) message += "\nPlayer2's score is " + QString::number(playerScore[1]);
