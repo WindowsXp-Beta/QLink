@@ -7,7 +7,6 @@ StartWindow::StartWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(&gameWindow, &GameWindow::backToStartWindowSignal, this, &StartWindow::switchToStartWindow);
-    connect(ui->actionload, &QAction::triggered, this, &StartWindow::openFile);
 }
 
 StartWindow::~StartWindow()
@@ -17,13 +16,8 @@ StartWindow::~StartWindow()
 
 void StartWindow::on_loadgame_clicked()
 {
-    return;
-}
-
-void StartWindow::switchToNewGame()
-{
     this->hide();
-    gameWindow.startGame();
+    gameWindow.loadGame();
     gameWindow.show();
 }
 
@@ -38,18 +32,16 @@ void StartWindow::on_quitbutton_clicked()
     QApplication::quit();
 }
 
-void StartWindow::openFile()
-{
-    QString fileName = QFileDialog::getOpenFileName(this);
-    qDebug() << fileName;
-}
-
 void StartWindow::on_battlemode_clicked()
 {
-    return;
+    this->hide();
+    gameWindow.startGame(GameWindow::Battle);
+    gameWindow.show();
 }
 
 void StartWindow::on_singlemode_clicked()
 {
-    switchToNewGame();
+    this->hide();
+    gameWindow.startGame(GameWindow::Single);
+    gameWindow.show();
 }

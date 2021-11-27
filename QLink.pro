@@ -11,20 +11,21 @@ CONFIG += c++17
 SOURCES += \
     box.cpp \
     gamewindow.cpp \
+    link.cpp \
     main.cpp \
     player.cpp \
+    qlinktest.cpp \
     startwindow.cpp
 
 HEADERS += \
     box.h \
     constant.h \
     gamewindow.h \
-    include.h \
+    link.h \
     navigator.h \
     player.h \
-    startwindow.h \
-    type.h \
-    util.h
+    qlinktest.h \
+    startwindow.h
 
 FORMS += \
     gamewindow.ui \

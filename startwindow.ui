@@ -76,20 +76,6 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuQLink">
-    <property name="title">
-     <string>QLink</string>
-    </property>
-    <addaction name="actionhelp"/>
-   </widget>
-   <widget class="QMenu" name="menuOption">
-    <property name="title">
-     <string>Option</string>
-    </property>
-    <addaction name="actionload"/>
-   </widget>
-   <addaction name="menuQLink"/>
-   <addaction name="menuOption"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionhelp">

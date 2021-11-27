@@ -22,14 +22,12 @@ private slots:
     void switchToStartWindow();
 
     void on_quitbutton_clicked();
-    void openFile();
 
     void on_battlemode_clicked();
 
     void on_singlemode_clicked();
 
 private:
-    void switchToNewGame();
 
     Ui::StartWindow *ui;
     GameWindow gameWindow;
