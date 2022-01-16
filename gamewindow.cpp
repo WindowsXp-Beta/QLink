@@ -339,6 +339,7 @@ void GameWindow::saveGame()
 
 void GameWindow::noSolution()
 {
+    disconnect(&responseTimer, &QTimer::timeout, scene, &QGraphicsScene::advance);
     countDownTimer.stop();
     hintTimer.stop();
     propTimer.stop();
